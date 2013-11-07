@@ -142,6 +142,10 @@ nnoremap # #zz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
+" move cursors works on wrapped lines
+nnoremap j gj
+nnoremap k gk
+
 " netrw settings
 let g:netrw_liststyle = 0
 let g:netrw_browse_split = 4 " Open file in previous buffer
