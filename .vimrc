@@ -122,7 +122,7 @@ cnoremap W write
 nnoremap <silent><Leader>w :w<CR>
 
 " Replace word under cursor
-nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>s :%s/\(\<<C-r><C-w>\>\)/
 
 " disable arrow keys
 inoremap  <Up>     <NOP>
