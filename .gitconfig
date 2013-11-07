@@ -12,7 +12,7 @@
 	br = branch -av
 	st = status -bsu
 	unpushed = cherry -v
-	amend = commit --amend
+	amend = commit --amend --no-edit
 	who = shortlog -s --
         
 [credential]

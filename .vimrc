@@ -26,6 +26,8 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'mattn/zencoding-vim'
 NeoBundle 'kevinw/pyflakes-vim'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'derekwyatt/vim-scala'
 NeoBundleCheck
 
 " Clear previous autocommands when reloading .vimrc
@@ -73,11 +75,12 @@ set expandtab
 " Language specific tabs & spaces
 autocmd FileType erlang setlocal ts=8 sts=4 sw=4 expandtab
 
-" Show visual marker for 80th column
-set colorcolumn=80
+" Show visual marker for everything beyond 80th column
+execute "set colorcolumn=" . join(range(80,335), ',')
 
 " File explorer
-nnoremap <Leader>e :Ex<CR>
+nnoremap <Leader>e :NERDTreeToggle<CR>
+nnoremap <Leader>E :Ex<CR>
 
 " Buffers
 nnoremap <Tab> :bnext<CR>
@@ -104,7 +107,7 @@ nnoremap <silent><Leader><Space> :nohl<CR>
 nnoremap <silent><Leader>l :set list!<CR>
 
 " Set how invisible characters are displayed
-set listchars=tab:▸\ ,eol:¬,trail:\ ,extends:>,precedes:<
+set listchars=tab:▸\ ,eol:¬,trail:\ ,extends:⦊,precedes:⦉
 
 " Enable hidden (unsaved) buffers
 set hidden
@@ -131,8 +134,42 @@ noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
+" center when finding next word
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+" netrw settings
+let g:netrw_liststyle = 0
+let g:netrw_browse_split = 4 " Open file in previous buffer
+let g:netrw_preview = 1      " preview window shown in a vertically split
+let g:netrw_altv = 1         " preview in the right split
+let g:netrw_winsize = 20     " netrw window is 20% of the available space
+let g:netrw_banner = 0       " disable banner
+
 " Show dollar sign at end of text to be changed
 "set cpoptions+=$
+
+" Move whole lines up and down
+nnoremap <silent><C-j> :m .+1<CR>==
+nnoremap <silent><C-k> :m .-2<CR>==
+inoremap <silent><C-j> <Esc>:m .+1<CR>==gi
+inoremap <silent><C-k> <Esc>:m .-2<CR>==gi
+vnoremap <silent><C-j> :m '>+1<CR>gv=gv
+vnoremap <silent><C-k> :m '<-2<CR>gv=gv
+
+" Minimum windows size
+set winheight=3
+set winminheight=3
+set winwidth=5
+set winminwidth=5
+
+" Quick split resize
+nnoremap - <C-W>-
+nnoremap + <C-W>+
 
 " Fillchars
 set fillchars=vert:\ ,fold:\ ,diff:\ 
@@ -149,6 +186,7 @@ set statusline+=%(%m\ %)        " Modified flag
 set statusline+=%*              " Reset style
 set statusline+=%(%r\ %)        " Readonly flag
 set statusline+=%(%y\ %)        " File type
+set statusline+=%{fugitive#statusline()} " Branch info
 set statusline+=%=              " Right align
 set statusline+=%#WarningMsg#   " Switch style to Title
 set statusline+=\ %{getcwd()}\  " Current dir
@@ -160,7 +198,6 @@ set statusline+=\ %p%%          " File percentage
 
 " Enable wildmenu
 set wildmode=longest:full
-set wildignorecase
 set wildmenu
 set wildignore=
 set wildignore+=.hg,.git,.svn,rel
@@ -192,7 +229,6 @@ map <F10> :echo
 " ---------------------------------------------------------------------------
 " Make Todo standout more
 :hi Todo term=standout ctermfg=231 ctermbg=196 gui=bold guifg=white guibg=red
-
 
 " Plugin specific
 " ---------------------------------------------------------------------------
