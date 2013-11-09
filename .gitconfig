@@ -23,6 +23,7 @@
 
 [core]
         editor = vim 
+	excludesfile = /Users/mg/.gitignore_global
 
 [mergetool "mvimdiff"]
         cmd = /usr/local/bin/mvimdiff -f "$LOCAL" "$MERGED" "$REMOTE"
