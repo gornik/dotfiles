@@ -119,7 +119,7 @@ cnoremap w!! w !sudo tee % >/dev/null
 cnoremap W write
 
 " <Leader>w saves
-nnoremap <silent><Leader>w :w<CR>
+nnoremap <silent><Leader>w :update<CR>
 
 " Replace word under cursor
 nnoremap <Leader>s :%s/\(\<<C-r><C-w>\>\)/
