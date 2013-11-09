@@ -134,6 +134,10 @@ noremap   <Down>   <NOP>
 noremap   <Left>   <NOP>
 noremap   <Right>  <NOP>
 
+" Space moves up and down half-screen
+nnoremap <Space> <C-d>
+nnoremap <S-Space> <C-u>
+
 " center when finding next word
 nnoremap n nzz
 nnoremap N Nzz
