@@ -183,8 +183,7 @@ nnoremap + <C-W>+
 set fillchars=vert:\ ,fold:\ ,diff:\ 
 
 set scrolloff=8       " Start scrolling 8 lines from margin
-set sidescrolloff=15  " Start scrolling 15 cols from the side
-set sidescroll=1      " Prevents from scrolling into extends/prepends signs 
+set sidescrolloff=1   " Prevents from scrolling into extends/prepends signs
 
 " Status line
 set statusline=                 " Clear when reloaded
