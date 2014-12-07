@@ -11,10 +11,8 @@ NeoBundle 'hcs42/vim-erlang.git'
 NeoBundle 'hcs42/vim-erlang-tags.git'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'suan/vim-instant-markdown' 
+NeoBundle 'suan/vim-instant-markdown'
 NeoBundle 'aerosol/vimerl'
-NeoBundle 'elixir-lang/vim-elixir'
-NeoBundle 'nelstrom/vim-mac-classic-theme'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
@@ -24,10 +22,17 @@ NeoBundle 'Shougo/vimproc', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
-NeoBundle 'mattn/zencoding-vim'
-NeoBundle 'kevinw/pyflakes-vim'
 NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'derekwyatt/vim-scala'
+NeoBundle 'xolox/vim-misc'
+NeoBundle 'moll/vim-bbye'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'elzr/vim-json'
+NeoBundle 'bling/vim-airline'
+NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'tommcdo/vim-exchange'
 NeoBundleCheck
 
 " Clear previous autocommands when reloading .vimrc
@@ -46,8 +51,11 @@ set splitright
 set splitbelow
 
 set number
+set relativenumber
 set laststatus=2
 set guioptions-=r
+set guioptions-=l
+set guioptions-=L
 
 set encoding=utf-8
 set cmdheight=2
@@ -64,8 +72,15 @@ set incsearch
 set nowrap
 
 " Color settings
-colorscheme zenburn
+" Colorscheme changes
+" ---------------------------------------------------------------------------
 set background=dark
+colorscheme zenburn
+highlight TrailingSpace term=standout ctermfg=231 ctermbg=196  gui=bold guifg=white guibg=red
+highlight TrailingSpace term=standout ctermfg=231 ctermbg=196  gui=bold guifg=white guibg=red
+autocmd InsertEnter * match TrailingSpace /\s\+\%#\@<!$/
+autocmd InsertLeave * match TrailingSpace /\s\+$/
+autocmd BufWinEnter * match TrailingSpace /\s\+$/
 
 " Tabs & spaces
 set tabstop=8
@@ -85,17 +100,22 @@ nnoremap <Leader>E :Ex<CR>
 " Buffers
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-nnoremap <Leader>x :bdelete<CR>
-nnoremap <Leader>X <C-W>c
+nnoremap <Leader>x :Bdelete<CR>
+nnoremap <Leader>X :bdelete<CR>
 nnoremap <Leader>o :only<CR>
 
 " Quickfix
-nnoremap <Leader>q :copen<CR>
+au FileType qf,unite setlocal tw=79 wrap linebreak colorcolumn=0 norelativenumber
 nnoremap ]q :cnext<CR>
 nnoremap [q :cprevious<CR>
 
+"Location list
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+
 " Edit vimrc
 nnoremap <Leader>Ve :e $MYVIMRC<CR>
+nnoremap <Leader>Vz :e ~/.zshrc<CR>
 
 " Autoreload vimrc on save
 autocmd BufWritePost .vimrc source $MYVIMRC
@@ -107,7 +127,7 @@ nnoremap <silent><Leader><Space> :nohl<CR>
 nnoremap <silent><Leader>l :set list!<CR>
 
 " Set how invisible characters are displayed
-set listchars=tab:▸\ ,eol:¬,trail:\ ,extends:⦊,precedes:⦉
+set listchars=tab:▸\ ,eol:¬,trail:●,extends:⦊,precedes:⦉
 
 " Enable hidden (unsaved) buffers
 set hidden
@@ -115,7 +135,7 @@ set hidden
 " Write as root
 cnoremap w!! w !sudo tee % >/dev/null
 
-" W saves
+" :W saves
 cnoremap W write
 
 " <Leader>w saves
@@ -123,6 +143,7 @@ nnoremap <silent><Leader>w :update<CR>
 
 " Replace word under cursor
 nnoremap <Leader>s :%s/\(\<<C-r><C-w>\>\)/
+nnoremap <Leader>S :%s/\(\<<C-r><C-w>\>\)/<C-r><C-w>
 
 " disable arrow keys
 inoremap  <Up>     <NOP>
@@ -150,17 +171,6 @@ nnoremap g# g#zz
 nnoremap j gj
 nnoremap k gk
 
-" netrw settings
-let g:netrw_liststyle = 0
-let g:netrw_browse_split = 4 " Open file in previous buffer
-let g:netrw_preview = 1      " preview window shown in a vertically split
-let g:netrw_altv = 1         " preview in the right split
-let g:netrw_winsize = 20     " netrw window is 20% of the available space
-let g:netrw_banner = 0       " disable banner
-
-" Show dollar sign at end of text to be changed
-"set cpoptions+=$
-
 " Move whole lines up and down
 nnoremap <silent><C-j> :m .+1<CR>==
 nnoremap <silent><C-k> :m .-2<CR>==
@@ -169,50 +179,30 @@ inoremap <silent><C-k> <Esc>:m .-2<CR>==gi
 vnoremap <silent><C-j> :m '>+1<CR>gv=gv
 vnoremap <silent><C-k> :m '<-2<CR>gv=gv
 
-" Minimum windows size
-set winheight=3
-set winminheight=3
-set winwidth=5
-set winminwidth=5
-
 " Quick split resize
-nnoremap - <C-W>-
-nnoremap + <C-W>+
+nnoremap <S-Up> <c-w>+
+nnoremap <S-Down> <c-w>-
+nnoremap <S-Left> <c-w><
+nnoremap <S-Right> <c-w>>
 
+" Jump between windows
 " Fillchars
 set fillchars=vert:\ ,fold:\ ,diff:\ 
 
 set scrolloff=8       " Start scrolling 8 lines from margin
 set sidescrolloff=1   " Prevents from scrolling into extends/prepends signs
 
-" Status line
-set statusline=                 " Clear when reloaded
-set statusline+=%t\             " File name relative to current dir
-set statusline+=%#WarningMsg#   " Switch style to Title
-set statusline+=%(%m\ %)        " Modified flag
-set statusline+=%*              " Reset style
-set statusline+=%(%r\ %)        " Readonly flag
-set statusline+=%(%y\ %)        " File type
-set statusline+=%{fugitive#statusline()} " Branch info
-set statusline+=%=              " Right align
-set statusline+=%#WarningMsg#   " Switch style to Title
-set statusline+=\ %{getcwd()}\  " Current dir
-set statusline+=%*              " Reset style
-set statusline+=%(\ B:%n%)        " Buffer number
-set statusline+=\ L:%l\ C:%c    " Line, column
-set statusline+=\ %p%%          " File percentage
-
-
 " Enable wildmenu
-set wildmode=longest:full
+set wildmode=list:longest
 set wildmenu
-set wildignore=
-set wildignore+=.hg,.git,.svn,rel
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest
-set wildignore+=*.DS_Store
-set wildignore+=*.pyc
-set wildignore+=*.beam
+
+" Autocompletion menu
+:set completeopt=longest,menuone
+:inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " Disable backup files
 set noswapfile
@@ -224,18 +214,6 @@ silent !mkdir ~/.vim/backups > /dev/null 2>&1
 set undodir=~/.vim/backups
 set undofile
 
-" Helper scripts
-" ---------------------------------------------------------------------------
-" Show syntax highlighting groups for word under cursor
-map <F10> :echo 
-\ "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-" Colorscheme changes 
-" ---------------------------------------------------------------------------
-" Make Todo standout more
-:hi Todo term=standout ctermfg=231 ctermbg=196 gui=bold guifg=white guibg=red
 
 " Plugin specific
 " ---------------------------------------------------------------------------
@@ -252,17 +230,43 @@ let g:unite_winheight = 20
 let g:unite_source_directory_mru_limit = 1000
 let g:unite_source_file_mru_limit = 1000
 let g:unite_source_file_mru_filename_format = ':~:.'
-let g:unite_source_file_rec_max_cache_files = 2000
-let g:unite_source_history_yank_enable = 1
+let g:unite_source_file_rec_max_cache_files = 0
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--nocolor --nogroup --column'
+let g:unite_source_grep_recursive_opt = ''
 
-nnoremap <silent><Leader>t :Unite -no-split -buffer-name=files -start-insert file_rec/async<CR>
-nnoremap <silent><Leader>f :Unite -resume -start-insert file<CR>
-nnoremap <silent><Leader>F :Unite -resume -start-insert file_rec<CR>
-nnoremap <silent><Leader>b :Unite -resume buffer<CR>
-nnoremap <silent><Leader>r :Unite -resume -buffer-name=recent file_mru<CR>
+nnoremap <silent><Leader>f :Unite -buffer-name=files -no-split -start-insert file_rec/async<CR>
+nnoremap <silent><Leader>b :Unite -buffer-name=buffers -no-split -quick-match buffer<CR>
+nnoremap <silent><Leader>r :Unite -buffer-name=recent -no-split file_mru<CR>
+nnoremap <silent><Leader>y :Unite -buffer-name=yank -resume history/yank<CR>
+nnoremap <silent><Leader>g :Unite -buffer-name=grep grep<CR>
 
 " vim-instant-markdown
 let g:instant_markdown_slow = 1
 
-" Language specific bindings
+" vim-fugitive
+nnoremap <silent><Leader>gs :Gstatus<CR>
+nnoremap <silent><Leader>gb :Gblame<CR>
+
+" GitGutter
+nnoremap <silent><Leader>gg :GitGutterToggle<CR>
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='zenburn'
+
+" syntastic
+nnoremap <silent><Leader>c :SyntasticToggleMode<CR>
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_python_checkers=['pep8', 'pyflakes', 'python', 'pep257']
+let g:syntastic_python_pep257_args="--ignore=D100,D101,D102,D103"
+let g:syntastic_haskell_checkers=['ghc_mod', 'hdevtools', 'hlint', 'scan']
+let g:syntastic_erlang_checkers=['']
+
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
+
+" Language specific
 " ---------------------------------------------------------------------------
+au BufRead,BufNewFile *.txt,*.md set wrap linebreak nolist textwidth=0 wrapmargin=0
