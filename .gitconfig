@@ -9,12 +9,10 @@
 	co = checkout
 	ci = commit
 	lg = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
-	br = branch -av
+	br = branch
 	st = status -bsu
-	unpushed = cherry -v
 	amend = commit --amend --no-edit
-	who = shortlog -s --
-        
+
 [credential]
 	helper = osxkeychain
 
@@ -22,40 +20,11 @@
 	default = simple
 
 [core]
-        editor = vim 
+        editor = vim
 	excludesfile = /Users/mg/.gitignore_global
 
-[mergetool "mvimdiff"]
-        cmd = /usr/local/bin/mvimdiff -f "$LOCAL" "$MERGED" "$REMOTE"
-
 [merge]
-	tool = p4mergetool
         ff = only
-
-[mergetool]
-        prompt = false
-	keepBackup = false
-
-[difftool "gvimdiff"]
-        path = /usr/local/bin/mvimdiff
-
-[diff]
-	tool = p4mergetool
-        guitool = gvimdiff
-
-[difftool]
-        prompt = false
 
 [branch]
 	autosetuprebase = always
-[mergetool "p4mergetool"]
-	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $PWD/$BASE $PWD/$REMOTE $PWD/$LOCAL $PWD/$MERGED
-	trustExitCode = false
-[difftool "p4mergetool"]
-	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge -nl "Local:"$PWD/$LOCAL -nr "Remote:"$PWD/$REMOTE $LOCAL $REMOTE
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
