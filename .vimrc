@@ -3,9 +3,10 @@ if has('vim_starting')
     set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
+NeoBundle 'jnurmine/Zenburn'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'hcs42/vim-erlang.git'
 NeoBundle 'hcs42/vim-erlang-tags.git'
@@ -34,6 +35,8 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'tommcdo/vim-exchange'
 NeoBundleCheck
+
+call neobundle#end()
 
 " Clear previous autocommands when reloading .vimrc
 autocmd!
